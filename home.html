@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ResepKu — Koleksi Resep</title>
+  <style>
+    :root{
+      --bg:#fff8f2; 
+      --card:#a8ffc2; 
+      --accent:#279e00;
+      --text:#ffffff;
+    }
+
+    body{
+      margin:0;
+      font-family:"Poppins",sans-serif;
+      background:url(img/bg.jpg) no-repeat center center / cover;
+      color:var(--text);
+    }
+
+    
+
+    /* Navbar */
+    nav{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:15px 40px;
+      background:var(--card);
+      box-shadow:0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    nav .logo{
+      font-weight:600;
+      color:var(--accent);
+      font-size:22px;
+      text-decoration:none;
+    }
+
+    nav .menu a{
+      margin:0 15px;
+      text-decoration:none;
+      color:var(--text);
+      font-weight:500;
+      transition:color 0.3s;
+    }
+
+    nav .menu a:hover{
+      color:var(--accent);
+    }
+
+    .btn-signin{
+      padding:8px 18px;
+      border:none;
+      background:var(--accent);
+      color:#ffffff;
+      border-radius:20px;
+      cursor:pointer;
+      font-weight:500;
+      transition:background 0.3s;
+    }
+
+    
+
+    #userIcon{
+      display:none;
+      width:42px;
+      height:42px;
+      border-radius:50%;
+      cursor:pointer;
+    
+    }
+
+    /* Hero Section */
+    .hero{
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      height:80vh;
+    }
+
+    .hero h1{
+      font-size:48px;
+      color:var(--text);
+      margin-bottom:10px;
+    }
+
+    .hero p{
+      font-size:18px;
+      max-width:500px;
+      line-height:1.6;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- 🔸 Navbar -->
+  <nav>
+    <a href="index.html" class="logo">ResepKu</a>
+    <div class="menu">
+    
+    </div>
+
+    <!-- Tombol Sign In -->
+    <button id="signInBtn" class="btn-signin">Sign In</button>
+
+    <!-- Gambar User -->
+    <img id="userIcon" src="img/user2.png" alt="User Icon">
+  </nav>
+
+  <!-- 🔸 Hero -->
+  <section class="hero">
+    <h1>Selamat Datang di ResepKu!</h1>
+    <p>Koleksi berbagai resep lezat dari seluruh nusantara untuk menemani harimu.</p>
+  </section>
+
+  <!-- 🔸 Script -->
+  <script>
+    const signInBtn = document.getElementById("signInBtn");
+    const userIcon = document.getElementById("userIcon");
+
+    // Saat klik tombol Sign In → buka login.html
+    signInBtn.addEventListener("click", () => {
+      window.location.href = "login.html";
+    });
+
+    // Kalau belum login → arahkan ke login.html
+    if (localStorage.getItem("loggedIn") !== "true") {
+      // belum login → tampilkan tombol sign in
+      signInBtn.style.display = "inline-block";
+      userIcon.style.display = "none";
+    } else {
+      // sudah login → tampilkan user icon
+      signInBtn.style.display = "none";
+      userIcon.style.display = "block";
+    }
+
+    // Klik gambar user = logout
+    userIcon.addEventListener("click", () => {
+      localStorage.removeItem("loggedIn");
+      window.location.href = "login.html";
+    });
+  </script>
+
+</body>
+</html>

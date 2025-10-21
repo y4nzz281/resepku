@@ -1,0 +1,679 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ResepKu — Koleksi Resep</title>
+  <style>
+
+:root{
+  --bg:#fff8f2;
+  --card:rgba(255, 255, 255, 0.6); /* agak transparan */
+  --accent:#00c24e;
+  --muted:#6b7280;
+  --max-width:1100px;
+}
+
+    *{
+      box-sizing:border-box
+    }
+    
+    body{
+      font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;
+      margin:0;
+      background:linear-gradient(180deg,var(--bg),#fff);
+      color:#111
+    }
+
+    .container{
+      max-width:var(--max-width);
+      margin:28px auto;
+      padding:0 16px
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px
+    }
+
+    .logo{
+      width:56px;
+      height:56px;
+      border-radius:10px;
+      background:linear-gradient(135deg,#8fff97,var(--accent));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#fff;
+      font-weight:700;
+      font-size:20px
+    }
+
+    h1{
+      margin:0;
+      color:var(--accent);
+      font-size:20px
+    }
+
+    p.lead{
+      margin:0;
+      color:var(--muted);
+      font-size:14px
+    }
+
+    nav{
+      display:flex;
+      gap:10px;
+      align-items:center
+    }
+
+    button.secondary{
+      background:transparent;
+      color:var(--accent);
+      border:1px solid var(--accent);
+      padding:10px 14px;
+      border-radius:10px;
+      cursor:pointer;
+      transition:0.2s;
+    }
+
+    button.secondary:hover{
+      background:var(--accent);
+      color:#fff;
+    }
+
+    /* Controls */
+    
+    .controls{
+  display:flex;
+  gap:12px;
+  margin:18px 0;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+.search{
+  display:flex;
+  align-items:center;
+  background:rgba(255,255,255,0.8);
+  border:1px solid #e2e8f0;
+  border-radius:10px;
+  box-shadow:0 3px 10px rgba(0,0,0,0.08);
+  padding:8px 14px;
+  width:320px;
+  transition:0.3s;
+}
+
+.search input{
+  border:none;
+  outline:none;
+  font-size:14px;
+  background:transparent;
+  width:100%;
+  color:#333;
+}
+
+.search input::placeholder{
+  color:#9ca3af;
+}
+
+.search:focus-within{
+  box-shadow:0 4px 12px rgba(0,0,0,0.15);
+  transform:translateY(-2px);
+}
+
+button#filterBtn{
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  padding:10px 20px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button#filterBtn:hover{
+  background:#00a341;
+  transform:scale(1.03);
+}
+
+    /* Card Recipe */
+    
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+      gap:18px
+    }
+
+    .card{
+      background:var(--card);
+      border-radius:12px;
+      overflow:hidden;
+      border:1px solid #f1f1f1;
+      box-shadow:0 6px 18px rgba(16,24,40,0.06);
+      display:flex;
+      flex-direction:column
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .card .media{
+      height:160px;
+      background:#eee;
+      background-size:cover;
+      background-position:center
+    }
+
+    .card .meta{
+      padding:12px;
+      flex:1;
+      display:flex;
+      flex-direction:column
+    }
+
+    .card h3{
+      margin:0;
+      font-size:16px
+    }
+    
+    .card p{
+      margin:8px 0 0;
+      color:var(--muted);
+      font-size:13px;
+      flex:1
+    }
+
+    .tags{
+      margin-top:12px;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap
+    }
+
+    .tag{
+      font-size:12px;
+      padding:6px 8px;
+      border-radius:999px;
+      border:1px dashed #eee
+    }
+
+    .card .actions{
+      display:flex;
+      gap:8px;
+      padding:12px;
+      border-top:1px solid #fafafa
+    }
+
+    .card .actions button{
+      flex:1;
+      padding:8px;
+      border-radius:8px;
+      border:1px solid #eee;
+      background:transparent;
+      cursor:pointer
+    }
+
+    /* Modal */
+    .modal-backdrop{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.4);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:10
+    }
+
+    .modal{
+      background:var(--card);
+      max-width:920px;
+      width:100%;
+      border-radius:12px;
+      overflow:auto;
+      max-height:90vh;
+      position:relative
+    }
+
+    .modal .modal-body{
+      display:grid;
+      grid-template-columns:1fr 360px;
+      gap:16px;padding:18px
+    }
+
+    .modal .modal-media{
+      height:300px;
+      background-size:cover;
+      background-position:center;
+      border-radius:8px
+    }
+
+    .modal h2{
+      margin:0
+    }
+
+    
+    .modal .ingredients{
+      background:var(--bg);
+      padding:12px;
+      border-radius:8px
+    }
+
+    .close-btn{
+      position:fixed;
+      right:30px;
+      top:20px;
+      border:0;
+      background:var(--bg);
+      padding:15px;
+      border-radius:10px;
+      cursor:pointer
+    }
+
+    .modal video{
+      width:100%;
+      aspect-ratio:16/9;
+      object-fit:cover;
+      border-radius:10px;
+      margin-top:10px;
+      background:#000;
+      box-shadow:0 4px 10px rgba(0,0,0,0.3)
+    }
+
+/* ===== Modal Blur dan Animasi ===== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+}
+
+/* Animasi muncul dan hilang */
+@keyframes fadeZoomIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.95); }
+}
+
+.modal-backdrop.show {
+  display: flex;
+  animation: fadeZoomIn 0.35s ease forwards;
+}
+
+.modal-backdrop.hide {
+  animation: fadeOut 0.25s ease forwards;
+}
+
+/* Kotak modal-nya biar halus */
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 25px rgba(0,0,0,0.15);
+  transform: scale(1);
+  transition: transform 0.3s ease;
+  overflow: hidden;
+}
+
+.modal-content:hover {
+  transform: scale(1.01);
+}
+
+/* Tombol close (X) */
+.close {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #ff6464;
+  color: white;
+  border: none;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.close:hover {
+  background: #e23c3c;
+}
+
+    @media(max-width:900px){
+      .modal .modal-body{grid-template-columns:1fr}
+      .search input{width:140px}
+      .ingredient-filter input{width:120px}
+    }
+
+    footer{
+      margin:28px 0;
+      color:var(--muted);
+      font-size:13px;
+      text-align:center
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">RK</div>
+        <div>
+          <h1>ResepKu</h1>
+          <p class="lead">Koleksi resep mudah, cepat, dan praktis — pilih bahanmu, saya tunjukkan resepnya.</p>
+        </div>
+      </div>
+      <nav>
+        <button class="secondary" id="signInBtn">Sign In</button>
+      </nav>
+    </header>
+
+    <div class="controls">
+      <div class="search">
+        <input id="searchInput" placeholder="Cari resep atau bahan..." />
+       </div> 
+      <button id="filterBtn" class="secondary">🔍</button>
+    </div>
+    <main>
+      <section class="grid" id="recipesGrid"></section>
+    </main>
+    <footer>
+      Copyright © Afriyan XI PPLG 1
+    </footer>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" role="dialog" aria-modal="true">
+      <button class="close-btn" id="closeModal">✕</button>
+      <div class="modal-body">
+        <div>
+          <div class="modal-media" id="modalImage"></div>
+          <h2 id="modalTitle"></h2>
+          <p id="modalDesc"></p>
+          <h4>Langkah-langkah</h4>
+          <ol id="modalSteps"></ol>
+          <h4>Video Tutorial</h4>
+          <video id="modalVideo" controls></video>
+        </div>
+        <aside>
+          <div class="ingredients">
+            <h4>Bahan</h4>
+            <ul id="modalIngredients"></ul>
+            <p style="font-size:13px;color:var(--muted);margin-top:8px">Perkiraan waktu: <span id="modalTime"></span></p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const RECIPES = [
+      {
+        id: 1,
+        title:'Nasi Goreng Spesial',
+        desc:'Makanan favorit sepanjang masa dengan nasi yang digoreng bersama bumbu gurih, telur, dan kecap manis.',
+        img:'img/nasi goreng.jpg',
+        ingredients:['nasi','telur','kecap manis','bawang merah','bawang putih'],
+        steps:['Panaskan minyak, tumis bawang hingga harum.','Masukkan ayam suwir, tambahkan kecap manis.','Tambahkan nasi, aduk hingga rata.','Masak telur orak-arik dan campur.','Sajikan hangat.'],
+        time:20,
+        video:'tes.mp4'
+      },
+      {
+        id: 2,
+        title:'Soto Ayam Praktis',
+        desc:'Hidangan berkuah hangat dengan potongan ayam lembut dan bumbu rempah khas Indonesia yang menggugah selera.',
+        img:'img/soto.jpg',
+        ingredients:['ayam','soun','kubis','daun bawang','bawang merah','bawang putih','kunyit'],
+        steps:['Rebus ayam hingga empuk.','Tumis bumbu halus lalu campurkan ke kaldu.','Masukkan soun dan sayuran.','Sajikan dengan bawang goreng.'],
+        time:40
+      },
+      {
+        id: 3,
+        title:'Rendang Khas Palembang',
+        desc:'Masakan khas Minang yang kaya bumbu, daging dimasak lama hingga empuk dan berbalut kuah kental rempah.',
+        img:'img/rendang.jpg',
+        ingredients:['Daging sapi','Bumbu rendang'],
+        steps:['Tumis bumbu halus bersama daun jeruk, serai, salam, dan lengkuas sampai harum dan matang.','Masukkan potongan daging, aduk hingga berubah warna.','Tuang santan, aduk terus agar santan tidak pecah.','Masak dengan api kecil hingga kuah mengental dan berminyak.','Aduk perlahan sampai daging empuk dan warna rendang kecokelatan.','Sajikan dengan nasi hangat'],
+        time:20,
+        video:'nasi_goreng.mp4'
+      },
+      {
+        id: 4,
+        title:'Tahu Crispy Makyuss',
+        desc:'Tahu yang dibalut tepung berbumbu dan digoreng garing di luar tapi lembut di dalam.',
+        img:'img/tahucrispi.jpg',
+        ingredients:['tahu','tepung'],
+        steps:['Campurkan tepung terigu, maizena, bawang putih bubuk, ketumbar, garam, dan kaldu bubuk dalam wadah.','Tambahkan air sedikit demi sedikit sampai adonan kental tapi tidak terlalu cair.','Celupkan potongan tahu ke dalam adonan tepung.','Panaskan minyak, goreng tahu hingga kering dan berwarna keemasan.','Angkat dan tiriskan, sajikan dengan saus sambal'],
+        time:20,
+        video:'nasi_goreng.mp4'
+      },
+      {
+        id:5,
+        title:'Telor Balado pedas',
+        desc:'Telur rebus yang diselimuti sambal balado pedas manis, khas masakan rumah Indonesia.',
+        img:'img/telorbalado.jpg',
+        ingredients:['Bumbu balado','telur'],
+        steps:['Goreng telur rebus sampai kulitnya agak kering, angkat.','Haluskan cabai, bawang, dan tomat, lalu tumis sampai matang dan berminyak.','Tambahkan garam, gula, dan kaldu.','Masukkan telur, aduk hingga rata dengan sambal.','Sajikan hangat.'],
+        time:20,
+        video:'nasi_goreng.mp4'
+      },
+      {
+        id:6,
+        title:'Perkedel Kenteng',
+        desc:'Gorengan lembut dari kentang tumbuk berbumbu, cocok jadi lauk atau camilan gurih.',
+        img:'img/perkedel.jpg',
+        ingredients:['Kentang','Daun bawang'],
+        steps:['Campur semua bahan jadi satu, aduk rata.','Bentuk bulat pipih.','Celupkan ke telur kocok lalu goreng sampai kuning keemasan.','Sajikan hangat.'],
+        time:20,
+        video:'nasi_goreng.mp4'
+      },
+      {
+        id:7,
+        title:'Sayur Lodeh',
+        desc:'Sayur berkuah santan gurih dengan isian labu, terong, dan kacang panjang yang kaya rasa.',
+        img:'img/sayurlodeh.jpg',
+        ingredients:['nasi','telur'],
+        steps:['Tumis bumbu halus dan daun salam sampai harum.','Masukkan sayuran dan tempe, aduk rata.','Tambahkan santan, aduk perlahan hingga matang.','Sajikan hangat.'],
+        time:20,
+        video:'nasi_goreng.mp4'
+      },
+      {
+        id:8,
+        title:'Orek Tempe',
+        desc:'Tempe goreng yang dimasak dengan kecap manis dan cabai, rasanya manis gurih dan sedikit pedas.',
+        img:'img/tempe.jpg',
+        ingredients:['nasi','telur','ayam','kecap manis','bawang merah','bawang putih'],
+        steps:['Goreng tempe setengah kering, angkat.','Tumis bawang dan cabai hingga harum.','Masukkan kecap dan bumbu, lalu tambahkan tempe.','Aduk rata sampai bumbu meresap.','Sajikan hangat.'],
+        time:20,
+        video:'nasi_goreng.mp4'
+      },
+      {
+        id:9,
+        title:'Tumis Kangkung',
+        desc:'Nasi goreng sederhana dengan telur, ayam suwir dan kecap manis.',
+        img:'img/kangkung.jpg',
+        ingredients:['nasi','telur','ayam','kecap manis','bawang merah','bawang putih'],
+        steps:['Panaskan minyak, tumis bawang hingga harum.','Masukkan ayam suwir, tambahkan kecap manis.','Tambahkan nasi, aduk hingga rata.','Masak telur orak-arik dan campur.','Sajikan hangat.'],
+        time:20,
+        video:'nasi_goreng.mp4'
+      },
+      {
+        id:10,
+        title:'Dimsum Mentai',
+        desc:'Nasi goreng sederhana dengan telur, ayam suwir dan kecap manis.',
+        img:'img/dimas.jpg',
+        ingredients:['nasi','telur','ayam','kecap manis','bawang merah','bawang putih'],
+        steps:['Panaskan minyak, tumis bawang hingga harum.','Masukkan ayam suwir, tambahkan kecap manis.','Tambahkan nasi, aduk hingga rata.','Masak telur orak-arik dan campur.','Sajikan hangat.'],
+        time:20,
+        video:'nasi_goreng.mp4'
+      },
+      {
+        id:11,
+        title:'Sushi',
+        desc:'Nasi goreng sederhana dengan telur, ayam suwir dan kecap manis.',
+        img:'img/susi.jpg',
+        ingredients:['nasi','telur','ayam','kecap manis','bawang merah','bawang putih'],
+        steps:['Panaskan minyak, tumis bawang hingga harum.','Masukkan ayam suwir, tambahkan kecap manis.','Tambahkan nasi, aduk hingga rata.','Masak telur orak-arik dan campur.','Sajikan hangat.'],
+        time:20,
+        video:'nasi_goreng.mp4'
+      },
+      {
+        id:12,
+        title:'Ikan Gurame Bakar',
+        desc:'Nasi goreng sederhana dengan telur, ayam suwir dan kecap manis.',
+        img:'img/gurame.jpg',
+        ingredients:['nasi','telur','ayam','kecap manis','bawang merah','bawang putih'],
+        steps:['Panaskan minyak, tumis bawang hingga harum.','Masukkan ayam suwir, tambahkan kecap manis.','Tambahkan nasi, aduk hingga rata.','Masak telur orak-arik dan campur.','Sajikan hangat.'],
+        time:20,
+        video:'nasi_goreng.mp4'
+      }
+    ];
+
+    const grid=document.getElementById('recipesGrid');
+    const modalBackdrop=document.getElementById('modalBackdrop');
+    const closeModal=document.getElementById('closeModal');
+    const videoEl=document.getElementById('modalVideo');
+
+    function renderRecipes(list){
+      grid.innerHTML='';
+      list.forEach(r=>{
+        const card=document.createElement('article');
+        card.className='card';
+        card.innerHTML=`
+          <div class="media" style="background-image:url('${r.img}')"></div>
+          <div class="meta">
+            <h3>${r.title}</h3>
+            <p>${r.desc}</p>
+            <div class="tags">${r.ingredients.slice(0,4).map(i=>`<span class="tag">${i}</span>`).join('')}</div>
+          </div>
+          <div class="actions"><button data-id="${r.id}" class="viewBtn">Lihat</button></div>`;
+        grid.appendChild(card);
+      });
+      document.querySelectorAll('.viewBtn').forEach(b=>b.addEventListener('click',e=>openModal(Number(e.currentTarget.dataset.id))));
+    }
+
+    function openModal(id){
+      const r=RECIPES.find(x=>x.id===id); if(!r)return;
+      document.getElementById('modalImage').style.backgroundImage=`url('${r.img}')`;
+      document.getElementById('modalTitle').textContent=r.title;
+      document.getElementById('modalDesc').textContent=r.desc;
+      const ul=document.getElementById('modalIngredients'); ul.innerHTML=''; r.ingredients.forEach(i=>ul.innerHTML+=`<li>${i}</li>`);
+      const ol=document.getElementById('modalSteps'); ol.innerHTML=''; r.steps.forEach(s=>ol.innerHTML+=`<li>${s}</li>`);
+      document.getElementById('modalTime').textContent=r.time+' menit';
+      if (r.video) {
+        videoEl.src=r.video;
+        videoEl.style.display='block';
+      } else {
+        videoEl.style.display='none';
+        videoEl.removeAttribute('src');
+      }
+      modalBackdrop.classList.remove('hide');
+      modalBackdrop.classList.add('show');
+      modalBackdrop.style.display='flex';
+
+    }
+
+    closeModal.addEventListener('click', () => {
+  modalBackdrop.classList.remove('show');
+  modalBackdrop.classList.add('hide');
+  setTimeout(() => {
+    modalBackdrop.style.display = 'none';
+    videoEl.pause();
+    videoEl.currentTime = 0;
+  }, 250);
+});
+
+  
+
+    modalBackdrop.addEventListener('click',e=>{
+      if(e.target===modalBackdrop){
+  modalBackdrop.classList.remove('show');
+  modalBackdrop.classList.add('hide');
+  setTimeout(() => {
+    modalBackdrop.style.display='none';
+    videoEl.pause();
+    videoEl.currentTime=0;
+  }, 250);
+}
+
+    });
+
+    // =======================
+    // LOGIN CHECK
+    // =======================
+    const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
+    const nav = document.querySelector('nav');
+    if (isLoggedIn) {
+  // Hapus tombol Sign In
+  document.getElementById('signInBtn').remove();
+
+  // Tambahkan gambar user
+  const userIcon = document.createElement('img');
+  userIcon.src = 'img/user2.png'; // ganti nama file sesuai gambar kamu
+  userIcon.alt = 'User';
+  userIcon.style.width = '40px';
+  userIcon.style.height = '40px';
+  userIcon.style.borderRadius = '50%';
+  userIcon.style.cursor = 'pointer';
+  userIcon.title = "Klik untuk logout";
+  nav.appendChild(userIcon);
+
+  // ✅ Tambahkan event klik untuk logout
+  userIcon.addEventListener('click', () => {
+    const konfirmasi = confirm("Yakin mau logout, bro? 🥺");
+    if (konfirmasi) {
+      localStorage.removeItem('loggedIn'); // hapus status login
+      window.location.href = "home.html"; // kembali ke halaman home
+    }
+  });
+}
+
+
+// =======================
+// FILTER FUNCTION
+// =======================
+function filterRecipes() {
+  const keyword = document.getElementById('searchInput').value.toLowerCase();
+  
+  const filtered = RECIPES.filter(r => {
+    const matchKeyword = 
+      r.title.toLowerCase().includes(keyword) || 
+      r.desc.toLowerCase().includes(keyword);
+    return matchKeyword;
+  });
+
+  renderRecipes(filtered);
+}
+
+// Tombol "Cari" tetap berfungsi
+document.getElementById('filterBtn').addEventListener('click', filterRecipes);
+
+// Jalankan juga otomatis saat mengetik di input pencarian
+document.getElementById('searchInput').addEventListener('input', filterRecipes);
+
+    renderRecipes(RECIPES);
+  </script>
+</body>
+</html>

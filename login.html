@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Halaman Login</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #1f5442, #6bbfa6);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: url("img/bg.jpg") no-repeat center center / cover;
+      opacity: 0.4;
+      z-index: 0;
+    }
+
+    .login-box {
+      position: relative;
+      z-index: 1;
+      background: rgba(0, 50, 40, 0.5);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      padding: 60px 60px;
+      width: 350px;
+      height: 250px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .login-box h2 {
+      color: #d4e7dc;
+      margin-bottom: 30px;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+
+    .img {
+      width: 19px;
+      display: flex;
+      margin-left: 4px;
+    }
+
+    .img2 {
+      width: 25px;
+      display: flex;
+    }
+
+    .input-box {
+      position: relative;
+      width: 100%;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .input-box input {
+      width: 100%;
+      padding: 10px 40px;
+      border: 1px solid #c7e6d7;
+      border-radius: 5px;
+      background: transparent;
+      color: #e6f4ed;
+      font-size: 14px;
+      outline: none;
+      text-align: left;
+    }
+
+    .input-box i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #cdebd7;
+      font-size: 16px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.3);
+      color: #fff;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: rgba(255,255,255,0.5);
+    }
+
+    a {
+      text-decoration: none;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>LOGIN</h2>
+    <form id="loginForm">
+      <div class="input-box">
+        <i><img src="img/user.png" class="img"></i>
+        <input type="text" placeholder="Username" required>
+      </div>
+      <div class="input-box">
+        <i><img src="img/padlock.png" class="img2"></i>
+        <input type="password" placeholder="Password" required>
+      </div>
+      <button class="btn" type="submit">Login</button>
+    </form>
+  </div>
+
+ <script>
+  const loginButton = document.querySelector(".btn");
+  loginButton.addEventListener("click", (e) => {
+    e.preventDefault(); // biar form gak reload
+    localStorage.setItem("loggedIn", "true");
+    window.location.href = "index.html";
+  });
+</script>
+
+</body>
+</html>
